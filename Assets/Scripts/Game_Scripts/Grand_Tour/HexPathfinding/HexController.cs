@@ -11,13 +11,13 @@ namespace GrandTour
         [SerializeField] private PlayerController playerController;
         [SerializeField] private GridHexXZ<GridObject> destinationHex;
 
-        private GridHexXZ<GridObject> gridHexXZ;
+        public GridHexXZ<GridObject> gridHexXZ;
         private PathfindingHexXZ pathfindingHexXZ;
 
         [SerializeField] private int startPointX, startPointZ;
         [SerializeField] private int endPointX, endPointZ;
 
-        private class GridObject
+        public class GridObject
         {
             public Transform visualTransform;
             public MeshRenderer meshRenderer;
@@ -45,7 +45,8 @@ namespace GrandTour
             SelectStartPoint();
             SelectEndPoint();
 
-            playerController.SetMovePosition(gridHexXZ.GetWorldPosition(startPointX, startPointZ));
+            playerController.SetMovePosition(gridHexXZ.GetWorldPosition(startPointX, startPointZ), true);
+            playerController.SetGridPosition(startPointX, startPointZ);
         }
 
         private void SelectStartPoint()
