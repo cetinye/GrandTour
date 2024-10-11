@@ -14,6 +14,12 @@ namespace GrandTour
 		[SerializeField] private float moveTweenDuration;
 		[SerializeField] private AnimationCurve moveEaseCurve;
 
+		[Header("Car Body Tween Variables")]
+		[SerializeField] private Transform carBodyTransform;
+		[SerializeField] private float targetRotation;
+		[SerializeField] private float bodyTweenDuration;
+		private Tween carModelMoveTween;
+
 		public void SetGridPosition(int x, int z)
 		{
 			this.x = x;
@@ -91,6 +97,13 @@ namespace GrandTour
 
 			SetMovePosition(hexController.gridHexXZ.GetWorldPosition(this.x + x, this.z + z));
 			SetGridPosition(this.x + x, this.z + z);
+			CarModelMoveAnimation();
+		}
+
+		private void CarModelMoveAnimation()
+		{
+			carModelMoveTween?.Complete();
+			carModelMoveTween = carBodyTransform.DOLocalRotate(new Vector3(targetRotation, 0, 0), bodyTweenDuration).SetLoops(2, LoopType.Yoyo);
 		}
 	}
 }
