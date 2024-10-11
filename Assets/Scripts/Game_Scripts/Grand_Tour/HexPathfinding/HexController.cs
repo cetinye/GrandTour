@@ -5,7 +5,7 @@ namespace GrandTour
 {
     public class HexController : MonoBehaviour
     {
-        [SerializeField] private int width, height;
+        public int width, height;
 
         [SerializeField] private Transform pfHex;
         [SerializeField] private PlayerController playerController;

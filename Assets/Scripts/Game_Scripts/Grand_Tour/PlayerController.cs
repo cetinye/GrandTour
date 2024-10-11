@@ -6,6 +6,8 @@ namespace GrandTour
 	public class PlayerController : MonoBehaviour
 	{
 		[SerializeField] private HexController hexController;
+
+		[Header("Car Variables")]
 		[SerializeField] private int x, z;
 		[SerializeField] private float rotationTweenDuration;
 		[SerializeField] private AnimationCurve rotationEaseCurve;
@@ -84,6 +86,9 @@ namespace GrandTour
 
 		private void MoveToGrid(int x, int z)
 		{
+			if (this.x + x < 0 || this.x + x >= hexController.gridHexXZ.GetWidth() || this.z + z < 0 || this.z + z >= hexController.gridHexXZ.GetHeight())
+				return;
+
 			SetMovePosition(hexController.gridHexXZ.GetWorldPosition(this.x + x, this.z + z));
 			SetGridPosition(this.x + x, this.z + z);
 		}
