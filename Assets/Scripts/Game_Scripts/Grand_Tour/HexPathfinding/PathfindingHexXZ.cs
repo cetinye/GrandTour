@@ -14,6 +14,8 @@ namespace GrandTour
         private List<PathNodeHexXZ> openList;
         private List<PathNodeHexXZ> closedList;
 
+        private int totalCost;
+
         public PathfindingHexXZ(int width, int height, float cellSize)
         {
             Instance = this;
@@ -79,6 +81,7 @@ namespace GrandTour
             while (openList.Count > 0)
             {
                 PathNodeHexXZ currentNode = GetLowestFCostNode(openList);
+
                 if (currentNode == endNode)
                 {
                     // Reached final node
@@ -176,6 +179,11 @@ namespace GrandTour
             return grid.GetGridObject(x, y);
         }
 
+        public int GetTotalCost()
+        {
+            return totalCost;
+        }
+
         private List<PathNodeHexXZ> CalculatePath(PathNodeHexXZ endNode)
         {
             List<PathNodeHexXZ> path = new List<PathNodeHexXZ>();
@@ -184,6 +192,7 @@ namespace GrandTour
             while (currentNode.cameFromNode != null)
             {
                 path.Add(currentNode.cameFromNode);
+                totalCost += currentNode.GetTCost();
                 currentNode = currentNode.cameFromNode;
             }
             path.Reverse();

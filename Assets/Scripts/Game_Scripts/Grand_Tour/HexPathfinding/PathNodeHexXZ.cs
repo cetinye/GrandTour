@@ -23,7 +23,12 @@
 
         public void CalculateFCost()
         {
-            fCost = gCost + hCost;
+            fCost = gCost + hCost + HexController.instance.gridHexXZ.GetGridObject(x, y).tileWeight;
+        }
+
+        public int GetTCost()
+        {
+            return HexController.instance.gridHexXZ.GetGridObject(x, y).tileWeight;
         }
 
         public void SetIsWalkable(bool isWalkable)

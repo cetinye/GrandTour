@@ -3,7 +3,12 @@ guid: 607bcd79d7d38194a9c4af4b054456b8
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Hexagon
+    second: {fileID: 2100000, guid: 925fc972e023f9e468246f419275d378, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
