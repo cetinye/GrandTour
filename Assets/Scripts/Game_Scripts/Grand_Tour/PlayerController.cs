@@ -8,7 +8,7 @@ namespace GrandTour
 		[SerializeField] private HexController hexController;
 
 		[Header("Car Variables")]
-		[SerializeField] private int x, z;
+		public int x, z;
 		[SerializeField] private float rotationTweenDuration;
 		[SerializeField] private AnimationCurve rotationEaseCurve;
 		[SerializeField] private float moveTweenDuration;

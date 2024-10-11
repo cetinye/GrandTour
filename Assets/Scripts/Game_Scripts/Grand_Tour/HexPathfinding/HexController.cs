@@ -17,6 +17,8 @@ namespace GrandTour
         [SerializeField] private int startPointX, startPointZ;
         [SerializeField] private int endPointX, endPointZ;
 
+        private List<PathNodeHexXZ> pathList;
+
         public class GridObject
         {
             public Transform visualTransform;
@@ -67,7 +69,17 @@ namespace GrandTour
         {
             if (Input.GetMouseButtonDown(1))
             {
-                List<PathNodeHexXZ> pathList = pathfindingHexXZ.FindPath(startPointX, startPointZ, endPointX, endPointZ);
+                if (pathList != null)
+                {
+                    // Reset all colors to white
+                    for (int i = 0; i < pathList.Count - 1; i++)
+                    {
+                        gridHexXZ.GetGridObject(pathList[i].x, pathList[i].y).meshRenderer.material.color = Color.white;
+                    }
+                }
+
+                pathList = pathfindingHexXZ.FindPath(playerController.x, playerController.z, endPointX, endPointZ);
+
                 for (int i = 0; i < pathList.Count - 1; i++)
                 {
                     // Debug.DrawLine(pathList[i], pathList[i + 1], Color.green, 3f);
