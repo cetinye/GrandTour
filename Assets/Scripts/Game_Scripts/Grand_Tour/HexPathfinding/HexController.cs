@@ -13,8 +13,10 @@ namespace GrandTour
         [SerializeField] private List<GT_Color> colors = new List<GT_Color>();
         [SerializeField] private List<int> weights = new List<int>();
         [SerializeField] private TMPro.TMP_Text infoText;
+        [SerializeField] private TMPro.TMP_Text infoPlayerText;
 
-        [SerializeField] private Transform pfHex;
+        [SerializeField] private Transform hexPref;
+        [SerializeField] private Transform hexFinishPref;
         [SerializeField] private PlayerController playerController;
         [SerializeField] private GridHexXZ<GridObject> destinationHex;
 
@@ -45,7 +47,7 @@ namespace GrandTour
             {
                 for (int z = 0; z < height; z++)
                 {
-                    Transform visualTransform = Instantiate(pfHex, gridHexXZ.GetWorldPosition(x, z), Quaternion.identity, transform);
+                    Transform visualTransform = Instantiate(hexPref, gridHexXZ.GetWorldPosition(x, z), Quaternion.identity, transform);
                     MeshRenderer meshRenderer = visualTransform.GetComponentInChildren<MeshRenderer>();
                     gridHexXZ.GetGridObject(x, z).visualTransform = visualTransform;
                     gridHexXZ.GetGridObject(x, z).meshRenderer = meshRenderer;
@@ -68,7 +70,7 @@ namespace GrandTour
             startPointX = Random.Range(0, gridHexXZ.GetWidth());
             startPointZ = Random.Range(0, gridHexXZ.GetHeight());
             // gridHexXZ.GetGridObject(startPointX, startPointZ).meshRenderer.material.color = Color.green;
-            gridHexXZ.GetGridObject(startPointX, startPointZ).visualTransform.Translate(0f, 0.25f, 0f);
+            // gridHexXZ.GetGridObject(startPointX, startPointZ).visualTransform.Translate(0f, 0.25f, 0f);
         }
 
         private void SelectEndPoint()
@@ -76,7 +78,7 @@ namespace GrandTour
             endPointX = Random.Range(0, gridHexXZ.GetWidth());
             endPointZ = Random.Range(0, gridHexXZ.GetHeight());
             // gridHexXZ.GetGridObject(endPointX, endPointZ).meshRenderer.material.color = Color.blue;
-            gridHexXZ.GetGridObject(endPointX, endPointZ).visualTransform.Translate(0f, 0.25f, 0f);
+            gridHexXZ.GetGridObject(endPointX, endPointZ).visualTransform = Instantiate(hexFinishPref, gridHexXZ.GetWorldPosition(endPointX, endPointZ), Quaternion.identity, transform);
         }
 
         private void AssignRandomWeights()
@@ -103,6 +105,11 @@ namespace GrandTour
         public void Restart()
         {
             UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        }
+
+        public void WriteCoveredTiles(int playerCoveredTotal)
+        {
+            infoPlayerText.text = "Player Covered: " + playerCoveredTotal;
         }
 
         public void FindPath()
