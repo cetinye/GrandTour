@@ -102,6 +102,9 @@ namespace GrandTour
 			if (this.x + x < 0 || this.x + x >= hexController.gridHexXZ.GetWidth() || this.z + z < 0 || this.z + z >= hexController.gridHexXZ.GetHeight())
 				return;
 
+			if (!hexController.gridHexXZ.GetGridObject(this.x + x, this.z + z).isActive)
+				return;
+
 			HexController.GridObject currentHex = hexController.gridHexXZ.GetGridObject(this.x, this.z);
 			currentHex.visualTransform.Translate(0f, -yDownOffset, 0f);
 			currentHex.visualTransform.DOMoveY(yDownOffset, yDownDuration).SetEase(yDownEaseCurve);

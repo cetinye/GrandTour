@@ -10,7 +10,7 @@
         public int hCost;
         public int fCost;
 
-        public bool isWalkable;
+        public bool isWalkable = false;
         public PathNodeHexXZ cameFromNode;
 
         public PathNodeHexXZ(GridHexXZ<PathNodeHexXZ> grid, int x, int y)
