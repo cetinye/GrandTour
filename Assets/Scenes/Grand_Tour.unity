@@ -2994,6 +2994,8 @@ MonoBehaviour:
   hexPref: {fileID: 4571573740464616306, guid: 03dbb69d7bc225e418521aac5d1720b5, type: 3}
   hexFinishPref: {fileID: 3860020461265755400, guid: 2c9505e0d1237fd47a185cd2d0dbfc00,
     type: 3}
+  finishFlagPref: {fileID: 4913880891232776795, guid: 3dbd93d6d1b0fdc4d9d5d0515399b30b,
+    type: 3}
   playerController: {fileID: 2678779547208091130}
   startPointX: 0
   startPointZ: 0

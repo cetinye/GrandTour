@@ -17,6 +17,7 @@ namespace GrandTour
 
         [SerializeField] private Transform hexPref;
         [SerializeField] private Transform hexFinishPref;
+        [SerializeField] private GameObject finishFlagPref;
         [SerializeField] private PlayerController playerController;
         [SerializeField] private GridHexXZ<GridObject> destinationHex;
 
@@ -78,7 +79,9 @@ namespace GrandTour
             endPointX = Random.Range(0, gridHexXZ.GetWidth());
             endPointZ = Random.Range(0, gridHexXZ.GetHeight());
             // gridHexXZ.GetGridObject(endPointX, endPointZ).meshRenderer.material.color = Color.blue;
-            gridHexXZ.GetGridObject(endPointX, endPointZ).visualTransform = Instantiate(hexFinishPref, gridHexXZ.GetWorldPosition(endPointX, endPointZ), Quaternion.identity, transform);
+
+            GameObject finishFlag = Instantiate(finishFlagPref, finishFlagPref.transform.position, finishFlagPref.transform.rotation, gridHexXZ.GetGridObject(endPointX, endPointZ).visualTransform);
+            finishFlag.transform.position = gridHexXZ.GetWorldPosition(endPointX, endPointZ);
         }
 
         private void AssignRandomWeights()
