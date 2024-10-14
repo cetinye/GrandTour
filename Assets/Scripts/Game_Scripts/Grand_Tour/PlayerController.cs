@@ -108,6 +108,7 @@ namespace GrandTour
 			HexController.GridObject currentHex = hexController.gridHexXZ.GetGridObject(this.x, this.z);
 			currentHex.visualTransform.Translate(0f, -yDownOffset, 0f);
 			currentHex.visualTransform.DOMoveY(yDownOffset, yDownDuration).SetEase(yDownEaseCurve);
+			hexController.ColorHex(this.x, this.z);
 
 			SetMovePosition(hexController.gridHexXZ.GetWorldPosition(this.x + x, this.z + z));
 			SetGridPosition(this.x + x, this.z + z);

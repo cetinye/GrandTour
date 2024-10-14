@@ -32,6 +32,7 @@ namespace GrandTour
         {
             public Transform visualTransform;
             public MeshRenderer meshRenderer;
+            public GT_Color color;
             public bool isActive = false;
             public int tileWeight;
         }
@@ -106,6 +107,7 @@ namespace GrandTour
                         int randIndex = Random.Range(0, typeAmount);
                         gridObject.tileWeight = weights[randIndex];
                         gridObject.meshRenderer.material.color = colors[randIndex].color;
+                        gridObject.color = colors[randIndex];
 
                         gridObject.isActive = true;
                         pathfindingHexXZ.GetNode(x, y).isWalkable = true;
@@ -117,9 +119,11 @@ namespace GrandTour
                 }
             }
 
+            infoText.text = infoText.text + "\n";
             for (int i = 0; i < colors.Count; i++)
             {
-                infoText.text = infoText.text + "\n" + colors[i].name + ": " + weights[i];
+                infoText.text += colors[i].name + ": " + weights[i];
+                infoText.text += "\t";
             }
         }
 
@@ -157,6 +161,26 @@ namespace GrandTour
 
                 GridObject gridObj = gridHexXZ.GetGridObject(pathList[i].x, pathList[i].y);
                 gridObj.visualTransform.position = new Vector3(gridObj.visualTransform.position.x, 0.25f, gridObj.visualTransform.position.z);
+                ColorHex(pathList[i].x, pathList[i].y);
+            }
+        }
+
+        public void ColorHex(int x, int z)
+        {
+            GridObject gridObj = gridHexXZ.GetGridObject(x, z);
+            gridObj.meshRenderer.material.EnableKeyword("_EMISSION");
+
+            switch (gridObj.color.name)
+            {
+                case "Red":
+                    gridObj.meshRenderer.material.SetColor("_EmissionColor", gridObj.color.color * 2.5f);
+                    break;
+                case "Green":
+                    gridObj.meshRenderer.material.SetColor("_EmissionColor", gridObj.color.color * 1.5f);
+                    break;
+                case "Blue":
+                    gridObj.meshRenderer.material.SetColor("_EmissionColor", gridObj.color.color * 2.5f);
+                    break;
             }
         }
     }
@@ -166,10 +190,5 @@ namespace GrandTour
     {
         public string name;
         public Color color;
-
-        public static implicit operator Color(GT_Color v)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }
