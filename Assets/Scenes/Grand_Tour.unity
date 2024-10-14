@@ -1168,7 +1168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -3410,31 +3410,6 @@ PrefabInstance:
       propertyPath: hexController
       value: 
       objectReference: {fileID: 1875736616}
-    - target: {fileID: 5568571864567815722, guid: ea17ef0e601812043ba08cc3dcc1db7c,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5568571864567815722, guid: ea17ef0e601812043ba08cc3dcc1db7c,
-        type: 3}
-      propertyPath: m_SortingLayer
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5568571864567815722, guid: ea17ef0e601812043ba08cc3dcc1db7c,
-        type: 3}
-      propertyPath: m_SortingLayerID
-      value: 1821004527
-      objectReference: {fileID: 0}
-    - target: {fileID: 5568571864567815722, guid: ea17ef0e601812043ba08cc3dcc1db7c,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 56583e648d84ba249836a45facb79013, type: 2}
-    - target: {fileID: 5568571864567815722, guid: ea17ef0e601812043ba08cc3dcc1db7c,
-        type: 3}
-      propertyPath: m_Parameters.widthMultiplier
-      value: 0.25
-      objectReference: {fileID: 0}
     - target: {fileID: 8010026068081627156, guid: ea17ef0e601812043ba08cc3dcc1db7c,
         type: 3}
       propertyPath: m_LocalPosition.x

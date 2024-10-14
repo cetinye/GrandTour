@@ -14,14 +14,18 @@ namespace GrandTour
 		[SerializeField] private float moveTweenDuration;
 		[SerializeField] private AnimationCurve moveEaseCurve;
 		private int travelledWeights;
-		private float yDownOffset = -0.25f;
-		private float yDownDuration = 0.25f;
+
 
 		[Header("Car Body Tween Variables")]
 		[SerializeField] private Transform carBodyTransform;
 		[SerializeField] private float targetRotation;
 		[SerializeField] private float bodyTweenDuration;
 		private Tween carModelMoveTween;
+
+		[Header("Travelled Hex Tween Variables")]
+		[SerializeField] private float yDownOffset;
+		[SerializeField] private float yDownDuration;
+		[SerializeField] private AnimationCurve yDownEaseCurve;
 
 		public void SetGridPosition(int x, int z)
 		{
@@ -100,7 +104,7 @@ namespace GrandTour
 
 			HexController.GridObject currentHex = hexController.gridHexXZ.GetGridObject(this.x, this.z);
 			currentHex.visualTransform.Translate(0f, -yDownOffset, 0f);
-			currentHex.visualTransform.DOMoveY(yDownOffset, yDownDuration);
+			currentHex.visualTransform.DOMoveY(yDownOffset, yDownDuration).SetEase(yDownEaseCurve);
 
 			SetMovePosition(hexController.gridHexXZ.GetWorldPosition(this.x + x, this.z + z));
 			SetGridPosition(this.x + x, this.z + z);
