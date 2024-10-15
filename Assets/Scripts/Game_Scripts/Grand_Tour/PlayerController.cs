@@ -6,6 +6,7 @@ namespace GrandTour
 	public class PlayerController : MonoBehaviour
 	{
 		[SerializeField] private HexController hexController;
+		[SerializeField] private UIManager uiManager;
 
 		[Header("Car Variables")]
 		public int x, z;
@@ -121,7 +122,7 @@ namespace GrandTour
 
 			HexController.GridObject moveToHex = hexController.gridHexXZ.GetGridObject(this.x, this.z);
 			travelledWeights += moveToHex.tileWeight;
-			hexController.WriteCoveredTiles(travelledWeights);
+			uiManager.WriteCoveredTiles(travelledWeights);
 		}
 
 		private void CarModelMoveAnimation()

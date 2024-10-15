@@ -38,6 +38,7 @@ namespace GrandTour
 			AssignLevel();
 			AssignLevelVariables();
 
+			uiManager.Restart();
 			hexController.Restart();
 			playerController.Restart();
 
@@ -51,6 +52,8 @@ namespace GrandTour
 			levelId = PlayerPrefs.GetInt("GrandTour_Level", 1);
 			levelId = Mathf.Clamp(levelId, 1, levels.Count);
 			LevelSO = levels[levelId - 1];
+
+			uiManager.UpdateLevelText(levelId);
 		}
 
 		private void AssignLevelVariables()
@@ -129,5 +132,17 @@ namespace GrandTour
 				PlayerPrefs.SetInt("GrandTour_LevelDownCounter", downCounter);
 			}
 		}
+
+		#region DEBUG BUTTON FUNCTIONS
+
+		public void LevelChange(int status)
+		{
+			levelId += status;
+			PlayerPrefs.SetInt("GrandTour_Level", levelId);
+
+			uiManager.UpdateLevelText(levelId);
+		}
+
+		#endregion
 	}
 }

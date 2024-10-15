@@ -9,6 +9,7 @@ namespace GrandTour
 		[SerializeField] private TMP_Text timeText;
 		[SerializeField] private TMP_Text levelText;
 		[SerializeField] private TMP_Text scoreText;
+		[SerializeField] private TMP_Text infoPlayerText;
 
 		[Header("Info Panel Variables")]
 		[SerializeField] private GameObject infoPanel;
@@ -22,7 +23,7 @@ namespace GrandTour
 
 		public void UpdateLevelText(int level)
 		{
-			levelText.text = "Level" + level.ToString();
+			levelText.text = "Level: " + level.ToString();
 		}
 
 		public void UpdateScoreText(int score)
@@ -39,6 +40,21 @@ namespace GrandTour
 		public void InfoPanelStateSwitch()
 		{
 			infoPanel.SetActive(!infoPanel.activeSelf);
+		}
+
+		public void WriteCoveredTiles(int playerCoveredTotal)
+		{
+			infoPlayerText.text = "Player Covered: " + playerCoveredTotal;
+		}
+
+		public void Restart()
+		{
+			WriteCoveredTiles(0);
+
+			for (int i = 0; i < layoutGroup.transform.childCount; i++)
+			{
+				Destroy(layoutGroup.transform.GetChild(i).gameObject);
+			}
 		}
 	}
 }

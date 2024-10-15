@@ -144,8 +144,8 @@ namespace GrandTour
 
         private void AssignRandomWeights()
         {
-            colors = colors.GetRange(0, LevelManager.LevelSO.types);
-            weights = weights.GetRange(0, LevelManager.LevelSO.types);
+            List<GT_Color> tempColors = new List<GT_Color>(colors.GetRange(0, LevelManager.LevelSO.types));
+            List<int> tempWeights = new List<int>(weights.GetRange(0, LevelManager.LevelSO.types));
 
             for (int x = 0; x < gridHexXZ.GetWidth(); x++)
             {
@@ -159,9 +159,9 @@ namespace GrandTour
                     if (gridObject.visualTransform.childCount > 0 && gridObject.visualTransform.GetChild(0).gameObject.activeSelf != false)
                     {
                         int randIndex = Random.Range(0, LevelManager.LevelSO.types);
-                        gridObject.tileWeight = weights[randIndex];
-                        gridObject.meshRenderer.material.color = colors[randIndex].color;
-                        gridObject.color = colors[randIndex];
+                        gridObject.tileWeight = tempWeights[randIndex];
+                        gridObject.meshRenderer.material.color = tempColors[randIndex].color;
+                        gridObject.color = tempColors[randIndex];
 
                         gridObject.isActive = true;
                         pathfindingHexXZ.GetNode(x, y).isWalkable = true;
@@ -173,15 +173,10 @@ namespace GrandTour
                 }
             }
 
-            for (int i = 0; i < colors.Count; i++)
+            for (int i = 0; i < tempColors.Count; i++)
             {
-                uiManager.SetUpInfoElement(colors[i].sprite, weights[i].ToString("F0"));
+                uiManager.SetUpInfoElement(tempColors[i].sprite, tempWeights[i].ToString("F0"));
             }
-        }
-
-        public void WriteCoveredTiles(int playerCoveredTotal)
-        {
-            infoPlayerText.text = "Player Covered: " + playerCoveredTotal;
         }
 
         public void FindPath()
