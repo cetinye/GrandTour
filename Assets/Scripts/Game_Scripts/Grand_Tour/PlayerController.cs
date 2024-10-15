@@ -27,6 +27,11 @@ namespace GrandTour
 		[SerializeField] private float yDownDuration;
 		[SerializeField] private AnimationCurve yDownEaseCurve;
 
+		public void Restart()
+		{
+			travelledWeights = 0;
+		}
+
 		public void SetGridPosition(int x, int z)
 		{
 			this.x = x;

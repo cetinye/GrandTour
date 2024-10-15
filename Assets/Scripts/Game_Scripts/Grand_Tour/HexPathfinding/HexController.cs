@@ -6,15 +6,15 @@ namespace GrandTour
     public class HexController : MonoBehaviour
     {
         public static HexController instance;
+        [SerializeField] private UIManager uiManager;
+        [SerializeField] private Cinemachine.CinemachineTargetGroup targetGroup;
 
         private int width, height;
 
         [SerializeField] private List<GameObject> countries = new List<GameObject>();
 
-        [SerializeField] private int typeAmount;
         [SerializeField] private List<GT_Color> colors = new List<GT_Color>();
         [SerializeField] private List<int> weights = new List<int>();
-        [SerializeField] private TMPro.TMP_Text infoText;
         [SerializeField] private TMPro.TMP_Text infoPlayerText;
 
         [SerializeField] private Transform hexPref;
@@ -27,6 +27,8 @@ namespace GrandTour
 
         [SerializeField] private int startPointX, startPointZ;
         [SerializeField] private int endPointX, endPointZ;
+
+        private Country selectedCountry;
 
         private List<PathNodeHexXZ> pathList;
 
@@ -42,17 +44,38 @@ namespace GrandTour
         private void Awake()
         {
             instance = this;
+        }
 
+        public void Initialize()
+        {
             SpawnCountry();
             CreateGrid();
+        }
+
+        public void Restart()
+        {
+            if (selectedCountry != null)
+                Destroy(selectedCountry.gameObject);
+
+            // if (gridHexXZ != null)
+            //     gridHexXZ = null;
+
+            // if (pathfindingHexXZ != null)
+            //     pathfindingHexXZ = null;
+
+            // if (pathList != null)
+            //     pathList = null;
         }
 
         private void SpawnCountry()
         {
             int randCountryIndex = Random.Range(0, countries.Count);
-            Country country = Instantiate(countries[randCountryIndex], transform).GetComponent<Country>();
-            width = country.width;
-            height = country.height;
+            selectedCountry = Instantiate(countries[randCountryIndex], transform).GetComponent<Country>();
+            Debug.Log(selectedCountry);
+            width = selectedCountry.width;
+            height = selectedCountry.height;
+
+            targetGroup.AddMember(playerController.transform, 1f, 1f);
         }
 
         private void CreateGrid()
@@ -77,8 +100,8 @@ namespace GrandTour
                     //Read map
                     GridObject gridObject = new GridObject
                     {
-                        visualTransform = transform.GetChild(0).GetChild(0).GetChild(hexCounter),
-                        meshRenderer = transform.GetChild(0).GetChild(0).GetChild(hexCounter).GetComponentInChildren<MeshRenderer>(),
+                        visualTransform = selectedCountry.transform.GetChild(0).GetChild(hexCounter),
+                        meshRenderer = selectedCountry.transform.GetChild(0).GetChild(hexCounter).GetComponentInChildren<MeshRenderer>(),
                     };
                     gridHexXZ.SetGridObject(x, z, gridObject);
                     hexCounter++;
@@ -115,21 +138,27 @@ namespace GrandTour
 
             GameObject finishFlag = Instantiate(finishFlagPref, finishFlagPref.transform.position, finishFlagPref.transform.rotation, gridHexXZ.GetGridObject(endPointX, endPointZ).visualTransform);
             finishFlag.transform.position = gridHexXZ.GetWorldPosition(endPointX, endPointZ);
+
+            targetGroup.AddMember(finishFlag.transform, 1f, 1f);
         }
 
         private void AssignRandomWeights()
         {
-            colors = colors.GetRange(0, typeAmount);
-            weights = weights.GetRange(0, typeAmount);
+            colors = colors.GetRange(0, LevelManager.LevelSO.types);
+            weights = weights.GetRange(0, LevelManager.LevelSO.types);
 
             for (int x = 0; x < gridHexXZ.GetWidth(); x++)
             {
                 for (int y = 0; y < gridHexXZ.GetHeight(); y++)
                 {
                     GridObject gridObject = gridHexXZ.GetGridObject(x, y);
-                    if (gridObject.visualTransform.GetChild(0).gameObject.activeSelf != false)
+
+                    if (gridObject == null)
+                        continue;
+
+                    if (gridObject.visualTransform.childCount > 0 && gridObject.visualTransform.GetChild(0).gameObject.activeSelf != false)
                     {
-                        int randIndex = Random.Range(0, typeAmount);
+                        int randIndex = Random.Range(0, LevelManager.LevelSO.types);
                         gridObject.tileWeight = weights[randIndex];
                         gridObject.meshRenderer.material.color = colors[randIndex].color;
                         gridObject.color = colors[randIndex];
@@ -144,17 +173,10 @@ namespace GrandTour
                 }
             }
 
-            infoText.text = infoText.text + "\n";
             for (int i = 0; i < colors.Count; i++)
             {
-                infoText.text += colors[i].name + ": " + weights[i];
-                infoText.text += "\t";
+                uiManager.SetUpInfoElement(colors[i].sprite, weights[i].ToString("F0"));
             }
-        }
-
-        public void Restart()
-        {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
         }
 
         public void WriteCoveredTiles(int playerCoveredTotal)
@@ -164,20 +186,8 @@ namespace GrandTour
 
         public void FindPath()
         {
-            if (pathList != null)
-            {
-                // Reset all colors to white
-                for (int i = 0; i < pathList.Count - 1; i++)
-                {
-                    // gridHexXZ.GetGridObject(pathList[i].x, pathList[i].y).meshRenderer.material.color = Color.white;
-
-                    GridObject gridObj = gridHexXZ.GetGridObject(pathList[i].x, pathList[i].y);
-                    gridObj.visualTransform.position = new Vector3(gridObj.visualTransform.position.x, 0f, gridObj.visualTransform.position.z);
-                }
-            }
-
             pathList = pathfindingHexXZ.FindPath(startPointX, startPointZ, endPointX, endPointZ);
-            infoText.text = infoText.text + "\nTotal Cost of Path: " + pathfindingHexXZ.GetTotalCost();
+            Debug.Log("Total Cost of Path: " + pathfindingHexXZ.GetTotalCost());
 
             for (int i = 0; i < pathList.Count - 1; i++)
             {
@@ -212,6 +222,15 @@ namespace GrandTour
                 case "Pink":
                     gridObj.meshRenderer.material.SetColor("_EmissionColor", gridObj.color.color * 2.5f);
                     break;
+                case "Brown":
+                    gridObj.meshRenderer.material.SetColor("_EmissionColor", gridObj.color.color * 2.5f);
+                    break;
+                case "Purple":
+                    gridObj.meshRenderer.material.SetColor("_EmissionColor", gridObj.color.color * 2.5f);
+                    break;
+                case "Cyan":
+                    gridObj.meshRenderer.material.SetColor("_EmissionColor", gridObj.color.color * 2.5f);
+                    break;
             }
         }
     }
@@ -221,5 +240,6 @@ namespace GrandTour
     {
         public string name;
         public Color color;
+        public Sprite sprite;
     }
 }
