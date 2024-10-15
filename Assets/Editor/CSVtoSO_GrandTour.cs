@@ -31,9 +31,11 @@ namespace GrandTour
                 level.passPercent = float.Parse(splitData[2]);
                 level.timeLimit = int.Parse(splitData[3]);
                 level.totalRounds = int.Parse(splitData[4]);
-                level.levelUpCriteria = int.Parse(splitData[5]);
-                level.levelDownCriteria = int.Parse(splitData[6]);
-                level.maxScoreMap = int.Parse(splitData[7]);
+                level.rangeOfTileWeightMin = int.Parse(splitData[5]);
+                level.rangeOfTileWeightMax = int.Parse(splitData[6]);
+                level.levelUpCriteria = int.Parse(splitData[7]);
+                level.levelDownCriteria = int.Parse(splitData[8]);
+                level.maxScoreMap = int.Parse(splitData[9]);
 
                 AssetDatabase.CreateAsset(level, $"Assets/Data/Grand_Tour/Levels/{"GrandTour_Level " + startingNamingIndex}.asset");
                 startingNamingIndex++;

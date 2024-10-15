@@ -145,7 +145,17 @@ namespace GrandTour
         private void AssignRandomWeights()
         {
             List<GT_Color> tempColors = new List<GT_Color>(colors.GetRange(0, LevelManager.LevelSO.types));
-            List<int> tempWeights = new List<int>(weights.GetRange(0, LevelManager.LevelSO.types));
+            List<int> tempWeights = new List<int>();
+
+            int tileWeight;
+            for (int i = 0; i < tempColors.Count; i++)
+            {
+                do
+                {
+                    tileWeight = Random.Range(LevelManager.LevelSO.rangeOfTileWeightMin, LevelManager.LevelSO.rangeOfTileWeightMax);
+                } while (tempWeights.Contains(tileWeight));
+                tempWeights.Add(tileWeight);
+            }
 
             for (int x = 0; x < gridHexXZ.GetWidth(); x++)
             {
@@ -177,6 +187,7 @@ namespace GrandTour
             {
                 uiManager.SetUpInfoElement(tempColors[i].sprite, tempWeights[i].ToString("F0"));
             }
+            uiManager.SortInfoElements();
         }
 
         public void FindPath()
@@ -199,6 +210,10 @@ namespace GrandTour
         {
             GridObject gridObj = gridHexXZ.GetGridObject(x, z);
             gridObj.meshRenderer.material.EnableKeyword("_EMISSION");
+            gridObj.meshRenderer.material.color = Color.white;
+            gridObj.meshRenderer.material.SetColor("_EmissionColor", gridObj.color.color * 1.5f);
+
+            /*
 
             switch (gridObj.color.name)
             {
@@ -227,6 +242,8 @@ namespace GrandTour
                     gridObj.meshRenderer.material.SetColor("_EmissionColor", gridObj.color.color * 2.5f);
                     break;
             }
+        
+            */
         }
     }
 

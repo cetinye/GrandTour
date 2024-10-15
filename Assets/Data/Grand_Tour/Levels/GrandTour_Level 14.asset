@@ -17,6 +17,8 @@ MonoBehaviour:
   passPercent: 17.97
   timeLimit: 22
   totalRounds: 3
+  rangeOfTileWeightMin: 200
+  rangeOfTileWeightMax: 1000
   levelUpCriteria: 2
   levelDownCriteria: 2
   maxScoreMap: 1000

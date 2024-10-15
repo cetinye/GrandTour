@@ -9,6 +9,8 @@ namespace GrandTour
 		public float passPercent;
 		public int timeLimit;
 		public int totalRounds;
+		public int rangeOfTileWeightMin;
+		public int rangeOfTileWeightMax;
 		public int levelUpCriteria;
 		public int levelDownCriteria;
 		public int maxScoreMap;

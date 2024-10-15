@@ -14,5 +14,10 @@ namespace GrandTour
 			hexImage.sprite = sprite;
 			weightCost.text = text;
 		}
+
+		public int GetCost()
+		{
+			return int.Parse(weightCost.text);
+		}
 	}
 }

@@ -30,11 +30,14 @@ namespace GrandTour
 
 		void Start()
 		{
+			AudioManager.instance.Play(SoundType.BG);
 			StartGame();
 		}
 
 		public void StartGame()
 		{
+			AudioManager.instance.Play(SoundType.Engine);
+
 			AssignLevel();
 			AssignLevelVariables();
 
@@ -93,6 +96,8 @@ namespace GrandTour
 			else if (isSuccess && !isTimesUp)
 			{
 				Debug.Log("Level Completed");
+
+				AudioManager.instance.PlayOneShot(SoundType.Horn);
 			}
 
 			DecideLevel(isSuccess);

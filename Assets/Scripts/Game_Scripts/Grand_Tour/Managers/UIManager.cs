@@ -37,6 +37,24 @@ namespace GrandTour
 			infoElement.SetElement(sprite, text);
 		}
 
+		public void SortInfoElements()
+		{
+			for (int i = 0; i < layoutGroup.transform.childCount; i++)
+			{
+				for (int j = i + 1; j < layoutGroup.transform.childCount; j++)
+				{
+					InfoElement currentElement = layoutGroup.transform.GetChild(i).GetComponent<InfoElement>();
+					InfoElement nextElement = layoutGroup.transform.GetChild(j).GetComponent<InfoElement>();
+
+					if (nextElement.GetCost() > currentElement.GetCost())
+					{
+						nextElement.transform.SetSiblingIndex(i);
+						currentElement.transform.SetSiblingIndex(j);
+					}
+				}
+			}
+		}
+
 		public void InfoPanelStateSwitch()
 		{
 			infoPanel.SetActive(!infoPanel.activeSelf);
