@@ -4704,7 +4704,7 @@ MonoBehaviour:
     color: {r: 1, g: 0, b: 0, a: 1}
     sprite: {fileID: 21300000, guid: 10a999672a9e3c44eb515d5ee314fc8b, type: 3}
   - name: Green
-    color: {r: 0, g: 1, b: 0, a: 1}
+    color: {r: 0.42352942, g: 1, b: 0, a: 1}
     sprite: {fileID: 21300000, guid: 5e267476dd2955346a8715cc50f14c27, type: 3}
   - name: Blue
     color: {r: 0, g: 0, b: 1, a: 1}

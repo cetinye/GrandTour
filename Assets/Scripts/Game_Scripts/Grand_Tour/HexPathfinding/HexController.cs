@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 namespace GrandTour
@@ -194,24 +196,33 @@ namespace GrandTour
         {
             pathList = pathfindingHexXZ.FindPath(startPointX, startPointZ, endPointX, endPointZ);
             Debug.Log("Total Cost of Path: " + pathfindingHexXZ.GetTotalCost());
+            StartCoroutine(ShowPathAnim());
+        }
 
+        IEnumerator ShowPathAnim()
+        {
             for (int i = 0; i < pathList.Count - 1; i++)
             {
                 // Debug.DrawLine(pathList[i], pathList[i + 1], Color.green, 3f);
                 // gridHexXZ.GetGridObject(pathList[i].x, pathList[i].y).meshRenderer.material.color = Color.red;
 
                 GridObject gridObj = gridHexXZ.GetGridObject(pathList[i].x, pathList[i].y);
-                gridObj.visualTransform.position = new Vector3(gridObj.visualTransform.position.x, 0.25f, gridObj.visualTransform.position.z);
-                ColorHex(pathList[i].x, pathList[i].y);
+                // gridObj.visualTransform.position = new Vector3(gridObj.visualTransform.position.x, 0.5f, gridObj.visualTransform.position.z);
+                gridObj.visualTransform.DOMoveY(0.5f, 0.5f).SetEase(Ease.InOutQuart);
+                ColorHex(pathList[i].x, pathList[i].y, new Color(0.1843137f, 0.3803922f, 0.03921569f, 0f), 2f, false);
+                yield return new WaitForSeconds(0.2f);
             }
         }
 
-        public void ColorHex(int x, int z)
+        public void ColorHex(int x, int z, Color color, float emissionVal, bool useEmission = true)
         {
             GridObject gridObj = gridHexXZ.GetGridObject(x, z);
-            gridObj.meshRenderer.material.EnableKeyword("_EMISSION");
-            gridObj.meshRenderer.material.color = Color.white;
-            gridObj.meshRenderer.material.SetColor("_EmissionColor", gridObj.color.color * 1.5f);
+            if (useEmission)
+                gridObj.meshRenderer.material.EnableKeyword("_EMISSION");
+            else
+                gridObj.meshRenderer.material.DisableKeyword("_EMISSION");
+            gridObj.meshRenderer.material.color = color;
+            gridObj.meshRenderer.material.SetColor("_EmissionColor", color * emissionVal);
 
             /*
 
@@ -242,7 +253,7 @@ namespace GrandTour
                     gridObj.meshRenderer.material.SetColor("_EmissionColor", gridObj.color.color * 2.5f);
                     break;
             }
-        
+
             */
         }
     }
