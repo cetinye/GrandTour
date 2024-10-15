@@ -7,7 +7,9 @@ namespace GrandTour
     {
         public static HexController instance;
 
-        public int width, height;
+        private int width, height;
+
+        [SerializeField] private List<GameObject> countries = new List<GameObject>();
 
         [SerializeField] private int typeAmount;
         [SerializeField] private List<GT_Color> colors = new List<GT_Color>();
@@ -41,6 +43,20 @@ namespace GrandTour
         {
             instance = this;
 
+            SpawnCountry();
+            CreateGrid();
+        }
+
+        private void SpawnCountry()
+        {
+            int randCountryIndex = Random.Range(0, countries.Count);
+            Country country = Instantiate(countries[randCountryIndex], transform).GetComponent<Country>();
+            width = country.width;
+            height = country.height;
+        }
+
+        private void CreateGrid()
+        {
             float cellSize = 1f;
             gridHexXZ =
                 new GridHexXZ<GridObject>(width, height, cellSize, Vector3.zero, (GridHexXZ<GridObject> g, int x, int y) => new GridObject());
@@ -50,6 +66,15 @@ namespace GrandTour
             {
                 for (int z = 0; z < height; z++)
                 {
+                    // Create map
+                    /*
+                    Transform visualTransform = Instantiate(hexPref, gridHexXZ.GetWorldPosition(x, z), Quaternion.identity, transform);
+                    MeshRenderer meshRenderer = visualTransform.GetComponentInChildren<MeshRenderer>();
+                    gridHexXZ.GetGridObject(x, z).visualTransform = visualTransform;
+                    gridHexXZ.GetGridObject(x, z).meshRenderer = meshRenderer;
+                    */
+
+                    //Read map
                     GridObject gridObject = new GridObject
                     {
                         visualTransform = transform.GetChild(0).GetChild(0).GetChild(hexCounter),
@@ -179,6 +204,12 @@ namespace GrandTour
                     gridObj.meshRenderer.material.SetColor("_EmissionColor", gridObj.color.color * 1.5f);
                     break;
                 case "Blue":
+                    gridObj.meshRenderer.material.SetColor("_EmissionColor", gridObj.color.color * 2.5f);
+                    break;
+                case "Yellow":
+                    gridObj.meshRenderer.material.SetColor("_EmissionColor", gridObj.color.color * 1.5f);
+                    break;
+                case "Pink":
                     gridObj.meshRenderer.material.SetColor("_EmissionColor", gridObj.color.color * 2.5f);
                     break;
             }
