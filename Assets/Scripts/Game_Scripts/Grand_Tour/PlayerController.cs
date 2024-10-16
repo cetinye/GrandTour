@@ -173,10 +173,12 @@ namespace GrandTour
 			carControlsEnabled = value;
 		}
 
+		public int GetTravelledWeights() { return travelledWeights; }
+
 		IEnumerator Success()
 		{
 			yield return new WaitForSeconds(1);
-			hexController.ShowShortestPath(true);
+			hexController.ShowShortestPath();
 		}
 	}
 }

@@ -79,15 +79,28 @@ namespace GrandTour
 			{
 				isLevelTimerOn = false;
 				timer = 0;
-				hexController.ShowShortestPath(false, true);
+				hexController.ShowShortestPath(true);
 			}
 
 			uiManager.UpdateTimeText((int)timer);
 		}
 
-		public void EndLevel(bool isSuccess, bool isTimesUp = false)
+		public void EndLevel(bool isTimesUp = false)
 		{
-			if (!isSuccess && isTimesUp)
+			int shortestCost = hexController.GetTotalCost();
+			int playerCost = playerController.GetTravelledWeights();
+			float currentScore = ((float)(shortestCost - playerCost) / shortestCost) * 100;
+			currentScore = Mathf.CeilToInt(currentScore);
+			currentScore = Mathf.Abs(currentScore);
+			bool isSuccess;
+
+			if (currentScore <= LevelSO.passPercent)
+				isSuccess = true;
+
+			else
+				isSuccess = false;
+
+			if (isTimesUp)
 			{
 				AudioManager.instance.PlayOneShot(SoundType.Fail);
 				Debug.Log("Times Up");

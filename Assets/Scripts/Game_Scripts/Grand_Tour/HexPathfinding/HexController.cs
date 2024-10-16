@@ -77,7 +77,6 @@ namespace GrandTour
         {
             int randCountryIndex = Random.Range(0, countries.Count);
             selectedCountry = Instantiate(countries[randCountryIndex], transform).GetComponent<Country>();
-            Debug.Log(selectedCountry);
             width = selectedCountry.width;
             height = selectedCountry.height;
 
@@ -132,6 +131,8 @@ namespace GrandTour
                 startPointX = Random.Range(0, gridHexXZ.GetWidth());
                 startPointZ = Random.Range(0, gridHexXZ.GetHeight());
             } while (gridHexXZ.GetGridObject(startPointX, startPointZ).isActive == false);
+
+            gridHexXZ.GetGridObject(startPointX, startPointZ).isVisited = true;
 
             playerController.SetGridPosition(startPointX, startPointZ);
             playerController.SetCarControls(true);
@@ -279,14 +280,15 @@ namespace GrandTour
             return values;
         }
 
-        public void ShowShortestPath(bool isSuccess, bool isTimesUp = false)
+        public void ShowShortestPath(bool isTimesUp = false)
         {
             pathList = pathfindingHexXZ.FindPath(startPointX, startPointZ, endPointX, endPointZ);
-            Debug.Log("Total Cost of Path: " + pathfindingHexXZ.GetTotalCost());
-            StartCoroutine(ShowPathAnim(isSuccess, isTimesUp));
+            StartCoroutine(ShowPathAnim(isTimesUp));
         }
 
-        IEnumerator ShowPathAnim(bool isSuccess, bool isTimesUp = false)
+        public int GetTotalCost() { return pathfindingHexXZ.GetTotalCost(); }
+
+        IEnumerator ShowPathAnim(bool isTimesUp = false)
         {
             playerController.SetParentHex(true);
 
@@ -310,7 +312,7 @@ namespace GrandTour
             yield return new WaitForSeconds(showPathInterval);
 
             playerController.SetParentHex(false);
-            levelManager.EndLevel(isSuccess, isTimesUp);
+            levelManager.EndLevel(isTimesUp);
         }
 
         public void ColorHex(int x, int z, Color color, float emissionVal, bool useEmission = true)
