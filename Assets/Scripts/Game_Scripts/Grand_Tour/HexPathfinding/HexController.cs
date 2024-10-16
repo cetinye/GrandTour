@@ -22,7 +22,9 @@ namespace GrandTour
 
         [SerializeField] private Transform hexPref;
         [SerializeField] private GameObject finishFlagPref;
+        [SerializeField] private ParticleSystem confetti;
         [SerializeField] private PlayerController playerController;
+        private ParticleSystem spawnedConfetti;
 
         public GridHexXZ<GridObject> gridHexXZ;
         private PathfindingHexXZ pathfindingHexXZ;
@@ -140,6 +142,7 @@ namespace GrandTour
 
             GameObject finishFlag = Instantiate(finishFlagPref, finishFlagPref.transform.position, finishFlagPref.transform.rotation, gridHexXZ.GetGridObject(endPointX, endPointZ).visualTransform);
             finishFlag.transform.position = gridHexXZ.GetWorldPosition(endPointX, endPointZ);
+            spawnedConfetti = Instantiate(confetti, finishFlag.transform.position, confetti.transform.rotation, finishFlag.transform.parent);
 
             targetGroup.AddMember(finishFlag.transform, 1f, 1f);
 
@@ -270,6 +273,16 @@ namespace GrandTour
             seq.Append(gridObj.meshRenderer.material.DOColor(gridObj.meshRenderer.material.color * 0f, "_EmissionColor", highlightDuration));
             seq.SetLoops(-1, LoopType.Restart);
         }
+
+        public void FireConfetti()
+        {
+            spawnedConfetti.Play();
+        }
+
+        public int GetStartPointX() { return startPointX; }
+        public int GetStartPointZ() { return startPointZ; }
+        public int GetEndPointX() { return endPointX; }
+        public int GetEndPointZ() { return endPointZ; }
     }
 
     [System.Serializable]

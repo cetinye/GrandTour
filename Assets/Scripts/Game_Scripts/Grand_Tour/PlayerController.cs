@@ -122,6 +122,11 @@ namespace GrandTour
 			HexController.GridObject moveToHex = hexController.gridHexXZ.GetGridObject(this.x, this.z);
 			travelledWeights += moveToHex.tileWeight;
 			uiManager.WriteCoveredTiles(travelledWeights);
+
+			if (hexController.GetEndPointX() == this.x && hexController.GetEndPointZ() == this.z)
+			{
+				hexController.FireConfetti();
+			}
 		}
 
 		private void CarModelMoveAnimation()
