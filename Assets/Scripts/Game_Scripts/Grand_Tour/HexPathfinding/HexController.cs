@@ -14,15 +14,15 @@ namespace GrandTour
         private int width, height;
 
         [SerializeField] private List<GameObject> countries = new List<GameObject>();
-
+        [SerializeField] private float showPathInterval;
+        [SerializeField] private float yOffsetInterval;
+        [SerializeField] private float colorTransitionDuration;
+        [SerializeField] private float highlightDuration;
         [SerializeField] private List<GT_Color> colors = new List<GT_Color>();
-        [SerializeField] private List<int> weights = new List<int>();
-        [SerializeField] private TMPro.TMP_Text infoPlayerText;
 
         [SerializeField] private Transform hexPref;
         [SerializeField] private GameObject finishFlagPref;
         [SerializeField] private PlayerController playerController;
-        [SerializeField] private GridHexXZ<GridObject> destinationHex;
 
         public GridHexXZ<GridObject> gridHexXZ;
         private PathfindingHexXZ pathfindingHexXZ;
@@ -142,6 +142,8 @@ namespace GrandTour
             finishFlag.transform.position = gridHexXZ.GetWorldPosition(endPointX, endPointZ);
 
             targetGroup.AddMember(finishFlag.transform, 1f, 1f);
+
+            Highlight(endPointX, endPointZ);
         }
 
         private void AssignRandomWeights()
@@ -208,9 +210,9 @@ namespace GrandTour
 
                 GridObject gridObj = gridHexXZ.GetGridObject(pathList[i].x, pathList[i].y);
                 // gridObj.visualTransform.position = new Vector3(gridObj.visualTransform.position.x, 0.5f, gridObj.visualTransform.position.z);
-                gridObj.visualTransform.DOMoveY(0.5f, 0.5f).SetEase(Ease.InOutQuart);
+                gridObj.visualTransform.DOMoveY(0.5f, yOffsetInterval).SetEase(Ease.InOutQuart);
                 ColorHex(pathList[i].x, pathList[i].y, new Color(0.1843137f, 0.3803922f, 0.03921569f, 0f), 2f, false);
-                yield return new WaitForSeconds(0.2f);
+                yield return new WaitForSeconds(showPathInterval);
             }
         }
 
@@ -221,7 +223,8 @@ namespace GrandTour
                 gridObj.meshRenderer.material.EnableKeyword("_EMISSION");
             else
                 gridObj.meshRenderer.material.DisableKeyword("_EMISSION");
-            gridObj.meshRenderer.material.color = color;
+            // gridObj.meshRenderer.material.color = color;
+            gridObj.meshRenderer.material.DOColor(color, colorTransitionDuration);
             gridObj.meshRenderer.material.SetColor("_EmissionColor", color * emissionVal);
 
             /*
@@ -255,6 +258,17 @@ namespace GrandTour
             }
 
             */
+        }
+
+        private void Highlight(int x, int z)
+        {
+            GridObject gridObj = gridHexXZ.GetGridObject(x, z);
+            gridObj.meshRenderer.material.EnableKeyword("_EMISSION");
+
+            Sequence seq = DOTween.Sequence();
+            seq.Append(gridObj.meshRenderer.material.DOColor(gridObj.meshRenderer.material.color * 2.5f, "_EmissionColor", highlightDuration));
+            seq.Append(gridObj.meshRenderer.material.DOColor(gridObj.meshRenderer.material.color * 0f, "_EmissionColor", highlightDuration));
+            seq.SetLoops(-1, LoopType.Restart);
         }
     }
 

@@ -4699,6 +4699,9 @@ MonoBehaviour:
   - {fileID: 5991228071831549746, guid: 52fcc364395be7b4f89aaab94377545b, type: 3}
   - {fileID: 546649920144344209, guid: c6b52eb7326d2bf45bb8928ac1b599a3, type: 3}
   - {fileID: 315026588433958027, guid: a210bb4e72f739a4ea8e5edf852ae5e4, type: 3}
+  showPathInterval: 0.25
+  yOffsetInterval: 0.25
+  colorTransitionDuration: 0.25
   colors:
   - name: Red
     color: {r: 1, g: 0, b: 0, a: 1}
@@ -4721,8 +4724,6 @@ MonoBehaviour:
   - name: Cyan
     color: {r: 0.09019608, g: 1, b: 0.96862745, a: 1}
     sprite: {fileID: 21300000, guid: 655838ac2fdeda04b949c7c5d54a233d, type: 3}
-  weights: 6400000032000000190000000a000000010000000100000001000000
-  infoPlayerText: {fileID: 756231022}
   hexPref: {fileID: 4571573740464616306, guid: 03dbb69d7bc225e418521aac5d1720b5, type: 3}
   finishFlagPref: {fileID: 4913880891232776795, guid: 3dbd93d6d1b0fdc4d9d5d0515399b30b,
     type: 3}
