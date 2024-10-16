@@ -62,7 +62,7 @@ namespace GrandTour
 
 		public void WriteCoveredTiles(int playerCoveredTotal)
 		{
-			infoPlayerText.text = "Player Covered: " + playerCoveredTotal;
+			infoPlayerText.text = playerCoveredTotal.ToString();
 		}
 
 		public void Restart()
