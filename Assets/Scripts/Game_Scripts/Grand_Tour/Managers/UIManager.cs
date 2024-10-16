@@ -73,6 +73,8 @@ namespace GrandTour
 			{
 				Destroy(layoutGroup.transform.GetChild(i).gameObject);
 			}
+
+			infoPanel.SetActive(false);
 		}
 	}
 }
