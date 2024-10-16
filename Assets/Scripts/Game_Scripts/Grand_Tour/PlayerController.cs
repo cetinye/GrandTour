@@ -44,7 +44,10 @@ namespace GrandTour
 		public void SetMovePosition(Vector3 destination, bool isInstant = false)
 		{
 			if (!isInstant)
+			{
 				transform.DOMove(destination, moveTweenDuration).SetEase(moveEaseCurve);
+				AudioManager.instance.PlayOneShot(SoundType.CarMove);
+			}
 			else
 				transform.position = destination;
 		}
@@ -134,14 +137,28 @@ namespace GrandTour
 			CarModelMoveAnimation();
 
 			HexController.GridObject moveToHex = hexController.gridHexXZ.GetGridObject(this.x, this.z);
+			moveToHex.isVisited = true;
 			travelledWeights += moveToHex.tileWeight;
 			uiManager.WriteCoveredTiles(travelledWeights);
 
-			if (hexController.GetEndPointX() == this.x && hexController.GetEndPointZ() == this.z)
+			if (carControlsEnabled && hexController.GetEndPointX() == this.x && hexController.GetEndPointZ() == this.z)
 			{
-				hexController.FireConfetti();
+				AudioManager.instance.PlayOneShot(SoundType.Horn);
 				carControlsEnabled = false;
 				StartCoroutine(Success());
+			}
+		}
+
+		public void SetParentHex(bool state)
+		{
+			if (state)
+			{
+				carControlsEnabled = false;
+				transform.SetParent(hexController.gridHexXZ.GetGridObject(this.x, this.z).visualTransform);
+			}
+			else
+			{
+				transform.SetParent(null);
 			}
 		}
 
@@ -159,7 +176,7 @@ namespace GrandTour
 		IEnumerator Success()
 		{
 			yield return new WaitForSeconds(1);
-			levelManager.EndLevel(true);
+			hexController.ShowShortestPath(true);
 		}
 	}
 }

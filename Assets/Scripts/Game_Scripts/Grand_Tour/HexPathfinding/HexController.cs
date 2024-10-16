@@ -8,6 +8,7 @@ namespace GrandTour
     public class HexController : MonoBehaviour
     {
         public static HexController instance;
+        [SerializeField] private LevelManager levelManager;
         [SerializeField] private UIManager uiManager;
         [SerializeField] private Cinemachine.CinemachineTargetGroup targetGroup;
 
@@ -43,6 +44,7 @@ namespace GrandTour
             public GT_Color color;
             public bool isActive = false;
             public int tileWeight;
+            public bool isVisited = false;
         }
 
         private void Awake()
@@ -157,15 +159,7 @@ namespace GrandTour
             List<GT_Color> tempColors = new List<GT_Color>(colors.GetRange(0, LevelManager.LevelSO.types));
             List<int> tempWeights = new List<int>();
 
-            int tileWeight;
-            for (int i = 0; i < tempColors.Count; i++)
-            {
-                do
-                {
-                    tileWeight = Random.Range(LevelManager.LevelSO.rangeOfTileWeightMin, LevelManager.LevelSO.rangeOfTileWeightMax);
-                } while (tempWeights.Contains(tileWeight));
-                tempWeights.Add(tileWeight);
-            }
+            tempWeights = GenerateTileWeights(LevelManager.LevelSO.algorithmId);
 
             for (int x = 0; x < gridHexXZ.GetWidth(); x++)
             {
@@ -200,26 +194,123 @@ namespace GrandTour
             uiManager.SortInfoElements();
         }
 
-        public void FindPath()
+        private List<int> GenerateTileWeights(int algorithmId)
+        {
+            List<int> values = new List<int>();
+            if (algorithmId == 1)
+            {
+                for (int i = 0; i < LevelManager.LevelSO.types; i++)
+                {
+                    List<int> rolledValues = new List<int>();
+                    int randVal;
+                    do
+                    {
+                        randVal = Random.Range(1, 10);
+                    } while (rolledValues.Contains(randVal));
+
+                    randVal *= 10;
+                    values.Add(randVal);
+                }
+
+                int unlucky = Random.Range(1, LevelManager.LevelSO.types + 1);
+                values[unlucky - 1] *= 10;
+
+                int lucky;
+                do
+                {
+                    lucky = Random.Range(1, LevelManager.LevelSO.types + 1);
+                } while (lucky == unlucky);
+                values[lucky - 1] /= 10;
+            }
+
+            else if (algorithmId == 2)
+            {
+                for (int i = 0; i < LevelManager.LevelSO.types; i++)
+                {
+                    List<int> rolledValues = new List<int>();
+                    int randVal;
+                    do
+                    {
+                        randVal = Random.Range(1, 10);
+                    } while (rolledValues.Contains(randVal));
+
+                    randVal *= 10;
+                    values.Add(randVal);
+                }
+
+                int unlucky = Random.Range(1, LevelManager.LevelSO.types + 1);
+                values[unlucky - 1] *= 5;
+
+                int lucky;
+                do
+                {
+                    lucky = Random.Range(1, LevelManager.LevelSO.types + 1);
+                } while (lucky == unlucky);
+                values[lucky - 1] /= 5;
+            }
+
+            else if (algorithmId == 3)
+            {
+                for (int i = 0; i < LevelManager.LevelSO.types; i++)
+                {
+                    int randVal;
+                    do
+                    {
+                        randVal = Random.Range(1, 10);
+                    } while (values.Contains(randVal));
+
+                    randVal *= 10;
+                    values.Add(randVal);
+                }
+
+                List<int> usedRands = new List<int>();
+                for (int i = 0; i < LevelManager.LevelSO.types; i++)
+                {
+                    int r;
+                    do
+                    {
+                        r = Random.Range(1, 101);
+                    } while (usedRands.Contains(r));
+                    usedRands.Add(r);
+                    values[i] += r;
+                    values[i] += LevelManager.LevelSO.levelId * 10;
+                }
+            }
+            return values;
+        }
+
+        public void ShowShortestPath(bool isSuccess, bool isTimesUp = false)
         {
             pathList = pathfindingHexXZ.FindPath(startPointX, startPointZ, endPointX, endPointZ);
             Debug.Log("Total Cost of Path: " + pathfindingHexXZ.GetTotalCost());
-            StartCoroutine(ShowPathAnim());
+            StartCoroutine(ShowPathAnim(isSuccess, isTimesUp));
         }
 
-        IEnumerator ShowPathAnim()
+        IEnumerator ShowPathAnim(bool isSuccess, bool isTimesUp = false)
         {
-            for (int i = 0; i < pathList.Count - 1; i++)
-            {
-                // Debug.DrawLine(pathList[i], pathList[i + 1], Color.green, 3f);
-                // gridHexXZ.GetGridObject(pathList[i].x, pathList[i].y).meshRenderer.material.color = Color.red;
+            playerController.SetParentHex(true);
 
+            for (int i = 0; i < pathList.Count; i++)
+            {
                 GridObject gridObj = gridHexXZ.GetGridObject(pathList[i].x, pathList[i].y);
-                // gridObj.visualTransform.position = new Vector3(gridObj.visualTransform.position.x, 0.5f, gridObj.visualTransform.position.z);
                 gridObj.visualTransform.DOMoveY(0.5f, yOffsetInterval).SetEase(Ease.InOutQuart);
                 ColorHex(pathList[i].x, pathList[i].y, new Color(0.1843137f, 0.3803922f, 0.03921569f, 0f), 2f, false);
+
+                if (gridObj.isVisited)
+                {
+                    AudioManager.instance.PlayOneShot(SoundType.CorrectHex);
+                }
+                else
+                {
+                    AudioManager.instance.PlayOneShot(SoundType.WrongHex);
+                }
+
                 yield return new WaitForSeconds(showPathInterval);
             }
+            yield return new WaitForSeconds(showPathInterval);
+
+            playerController.SetParentHex(false);
+            levelManager.EndLevel(isSuccess, isTimesUp);
         }
 
         public void ColorHex(int x, int z, Color color, float emissionVal, bool useEmission = true)
@@ -279,7 +370,7 @@ namespace GrandTour
 
         public void FireConfetti()
         {
-            AudioManager.instance.PlayOneShot(SoundType.Horn);
+            AudioManager.instance.PlayOneShot(SoundType.Success);
             spawnedConfetti.Play();
         }
 

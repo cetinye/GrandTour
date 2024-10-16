@@ -65,6 +65,11 @@ namespace GrandTour
     {
         BG,
         Engine,
-        Horn
+        Horn,
+        CorrectHex,
+        WrongHex,
+        CarMove,
+        Success,
+        Fail
     }
 }

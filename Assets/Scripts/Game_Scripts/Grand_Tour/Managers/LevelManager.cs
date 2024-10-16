@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -78,7 +79,7 @@ namespace GrandTour
 			{
 				isLevelTimerOn = false;
 				timer = 0;
-				EndLevel(false, true);
+				hexController.ShowShortestPath(false, true);
 			}
 
 			uiManager.UpdateTimeText((int)timer);
@@ -88,16 +89,26 @@ namespace GrandTour
 		{
 			if (!isSuccess && isTimesUp)
 			{
+				AudioManager.instance.PlayOneShot(SoundType.Fail);
 				Debug.Log("Times Up");
 			}
 			else if (!isSuccess && !isTimesUp)
 			{
+				AudioManager.instance.PlayOneShot(SoundType.Fail);
 				Debug.Log("Level Failed");
 			}
 			else if (isSuccess && !isTimesUp)
 			{
+				hexController.FireConfetti();
 				Debug.Log("Level Completed");
 			}
+
+			StartCoroutine(RestartGame(isSuccess));
+		}
+
+		IEnumerator RestartGame(bool isSuccess)
+		{
+			yield return new WaitForSeconds(1);
 
 			DecideLevel(isSuccess);
 
@@ -105,7 +116,6 @@ namespace GrandTour
 			{
 				Debug.Log("Grand Tour Completed");
 				UnityEngine.SceneManagement.SceneManager.LoadScene(0);
-				return;
 			}
 			uiManager.UpdateRoundText(roundsPlayed, totalRounds);
 
