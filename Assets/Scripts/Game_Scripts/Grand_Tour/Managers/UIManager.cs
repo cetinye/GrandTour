@@ -10,6 +10,7 @@ namespace GrandTour
 		[SerializeField] private TMP_Text levelText;
 		[SerializeField] private TMP_Text scoreText;
 		[SerializeField] private TMP_Text infoPlayerText;
+		[SerializeField] private TMP_Text roundText;
 
 		[Header("Info Panel Variables")]
 		[SerializeField] private GameObject infoPanel;
@@ -29,6 +30,11 @@ namespace GrandTour
 		public void UpdateScoreText(int score)
 		{
 			scoreText.text = "Score: " + score.ToString();
+		}
+
+		public void UpdateRoundText(int round, int totalRounds)
+		{
+			roundText.text = round.ToString() + " / " + totalRounds.ToString();
 		}
 
 		public void SetUpInfoElement(Sprite sprite, string text)

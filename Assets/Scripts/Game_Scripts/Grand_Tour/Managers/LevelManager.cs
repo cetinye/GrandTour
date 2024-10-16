@@ -20,7 +20,7 @@ namespace GrandTour
 		private float timer, timeLimit;
 
 		[Header("Round Variables")]
-		private int roundsPlayed;
+		private int roundsPlayed = 1;
 		private int totalRounds;
 
 		void Awake()
@@ -65,6 +65,7 @@ namespace GrandTour
 			totalRounds = LevelSO.totalRounds;
 
 			timer = timeLimit;
+			uiManager.UpdateRoundText(roundsPlayed, totalRounds);
 		}
 
 		private void Update()
@@ -83,7 +84,7 @@ namespace GrandTour
 			uiManager.UpdateTimeText((int)timer);
 		}
 
-		private void EndLevel(bool isSuccess, bool isTimesUp = false)
+		public void EndLevel(bool isSuccess, bool isTimesUp = false)
 		{
 			if (!isSuccess && isTimesUp)
 			{
@@ -96,18 +97,17 @@ namespace GrandTour
 			else if (isSuccess && !isTimesUp)
 			{
 				Debug.Log("Level Completed");
-
-				AudioManager.instance.PlayOneShot(SoundType.Horn);
 			}
 
 			DecideLevel(isSuccess);
 
-			if (++roundsPlayed >= totalRounds)
+			if (++roundsPlayed >= totalRounds + 1)
 			{
 				Debug.Log("Grand Tour Completed");
 				UnityEngine.SceneManagement.SceneManager.LoadScene(0);
 				return;
 			}
+			uiManager.UpdateRoundText(roundsPlayed, totalRounds);
 
 			StartGame();
 		}

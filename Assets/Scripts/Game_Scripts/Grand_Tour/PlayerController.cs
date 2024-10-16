@@ -1,3 +1,4 @@
+using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 
@@ -5,6 +6,7 @@ namespace GrandTour
 {
 	public class PlayerController : MonoBehaviour
 	{
+		[SerializeField] private LevelManager levelManager;
 		[SerializeField] private HexController hexController;
 		[SerializeField] private UIManager uiManager;
 
@@ -15,7 +17,7 @@ namespace GrandTour
 		[SerializeField] private float moveTweenDuration;
 		[SerializeField] private AnimationCurve moveEaseCurve;
 		private int travelledWeights;
-
+		private bool carControlsEnabled = true;
 
 		[Header("Car Body Tween Variables")]
 		[SerializeField] private Transform carBodyTransform;
@@ -51,18 +53,24 @@ namespace GrandTour
 
 		public void UpButton()
 		{
+			if (!carControlsEnabled) return;
+
 			MoveToGrid(1, 0);
 			transform.DOLocalRotate(new Vector3(0, 90, 0), rotationTweenDuration).SetEase(rotationEaseCurve);
 		}
 
 		public void DownButton()
 		{
+			if (!carControlsEnabled) return;
+
 			MoveToGrid(-1, 0);
 			transform.DOLocalRotate(new Vector3(0, -90, 0), rotationTweenDuration).SetEase(rotationEaseCurve);
 		}
 
 		public void UpRightButton()
 		{
+			if (!carControlsEnabled) return;
+
 			if (z % 2 == 0)
 				MoveToGrid(0, -1);
 			else
@@ -73,6 +81,8 @@ namespace GrandTour
 
 		public void UpLeftButton()
 		{
+			if (!carControlsEnabled) return;
+
 			if (z % 2 == 0)
 				MoveToGrid(0, 1);
 			else
@@ -83,6 +93,8 @@ namespace GrandTour
 
 		public void DownRightButton()
 		{
+			if (!carControlsEnabled) return;
+
 			if (z % 2 == 0)
 				MoveToGrid(-1, -1);
 			else
@@ -93,6 +105,8 @@ namespace GrandTour
 
 		public void DownLeftButton()
 		{
+			if (!carControlsEnabled) return;
+
 			if (z % 2 == 0)
 				MoveToGrid(-1, 1);
 			else
@@ -126,6 +140,8 @@ namespace GrandTour
 			if (hexController.GetEndPointX() == this.x && hexController.GetEndPointZ() == this.z)
 			{
 				hexController.FireConfetti();
+				carControlsEnabled = false;
+				StartCoroutine(Success());
 			}
 		}
 
@@ -133,6 +149,17 @@ namespace GrandTour
 		{
 			carModelMoveTween?.Complete();
 			carModelMoveTween = carBodyTransform.DOLocalRotate(new Vector3(targetRotation, 0, 0), bodyTweenDuration).SetLoops(2, LoopType.Yoyo);
+		}
+
+		public void SetCarControls(bool value)
+		{
+			carControlsEnabled = value;
+		}
+
+		IEnumerator Success()
+		{
+			yield return new WaitForSeconds(1);
+			levelManager.EndLevel(true);
 		}
 	}
 }

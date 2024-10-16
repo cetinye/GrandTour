@@ -130,6 +130,9 @@ namespace GrandTour
                 startPointX = Random.Range(0, gridHexXZ.GetWidth());
                 startPointZ = Random.Range(0, gridHexXZ.GetHeight());
             } while (gridHexXZ.GetGridObject(startPointX, startPointZ).isActive == false);
+
+            playerController.SetGridPosition(startPointX, startPointZ);
+            playerController.SetCarControls(true);
         }
 
         private void SelectEndPoint()
@@ -276,6 +279,7 @@ namespace GrandTour
 
         public void FireConfetti()
         {
+            AudioManager.instance.PlayOneShot(SoundType.Horn);
             spawnedConfetti.Play();
         }
 
