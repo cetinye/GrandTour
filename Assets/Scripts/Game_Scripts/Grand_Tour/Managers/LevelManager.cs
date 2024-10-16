@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 
 namespace GrandTour
@@ -24,6 +25,9 @@ namespace GrandTour
 		private int roundsPlayed = 1;
 		private int totalRounds;
 
+		[Header("Virtual Camera Variables")]
+		[SerializeField] private CinemachineVirtualCamera virtualCamera;
+
 		void Awake()
 		{
 
@@ -42,13 +46,12 @@ namespace GrandTour
 			AssignLevel();
 			AssignLevelVariables();
 
+			SetVirtualCamPriority(1);
 			uiManager.Restart();
 			hexController.Restart();
 			playerController.Restart();
 
 			hexController.Initialize();
-
-			isLevelTimerOn = true;
 		}
 
 		private void AssignLevel()
@@ -159,6 +162,16 @@ namespace GrandTour
 				}
 				PlayerPrefs.SetInt("GrandTour_LevelDownCounter", downCounter);
 			}
+		}
+
+		public void SetVirtualCamPriority(int value)
+		{
+			virtualCamera.Priority = value;
+		}
+
+		public void SetTimerState(bool state)
+		{
+			isLevelTimerOn = state;
 		}
 
 		#region DEBUG BUTTON FUNCTIONS

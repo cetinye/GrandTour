@@ -56,21 +56,13 @@ namespace GrandTour
         {
             SpawnCountry();
             CreateGrid();
+            StartCoroutine(ShowCountryRoutine());
         }
 
         public void Restart()
         {
             if (selectedCountry != null)
                 Destroy(selectedCountry.gameObject);
-
-            // if (gridHexXZ != null)
-            //     gridHexXZ = null;
-
-            // if (pathfindingHexXZ != null)
-            //     pathfindingHexXZ = null;
-
-            // if (pathList != null)
-            //     pathList = null;
         }
 
         private void SpawnCountry()
@@ -83,11 +75,24 @@ namespace GrandTour
             targetGroup.AddMember(playerController.transform, 1f, 1f);
         }
 
+        IEnumerator ShowCountryRoutine()
+        {
+            levelManager.SetVirtualCamPriority(1);
+            playerController.SetParentHex(true);
+            Sequence countrySeq = selectedCountry.SpawnAnim();
+            yield return countrySeq.WaitForCompletion();
+            levelManager.SetVirtualCamPriority(3);
+            yield return new WaitForSeconds(2f);
+            levelManager.SetTimerState(true);
+            playerController.SetParentHex(false);
+            playerController.SetCarControls(true);
+        }
+
         private void CreateGrid()
         {
             float cellSize = 1f;
             gridHexXZ =
-                new GridHexXZ<GridObject>(width, height, cellSize, Vector3.zero, (GridHexXZ<GridObject> g, int x, int y) => new GridObject());
+                new GridHexXZ<GridObject>(width, height, cellSize, selectedCountry.transform.position, (GridHexXZ<GridObject> g, int x, int y) => new GridObject());
 
             int hexCounter = 0;
             for (int x = 0; x < width; x++)
@@ -135,7 +140,6 @@ namespace GrandTour
             gridHexXZ.GetGridObject(startPointX, startPointZ).isVisited = true;
 
             playerController.SetGridPosition(startPointX, startPointZ);
-            playerController.SetCarControls(true);
         }
 
         private void SelectEndPoint()
