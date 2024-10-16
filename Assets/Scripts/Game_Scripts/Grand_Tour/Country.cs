@@ -23,5 +23,10 @@ namespace GrandTour
 			sequence.Append(outline.DOFade(0f, timeToFade));
 			return sequence;
 		}
+
+		public void SetOutline(bool state)
+		{
+			outline.enabled = state;
+		}
 	}
 }

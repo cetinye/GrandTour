@@ -46,7 +46,6 @@ namespace GrandTour
 			AssignLevel();
 			AssignLevelVariables();
 
-			SetVirtualCamPriority(1);
 			uiManager.Restart();
 			hexController.Restart();
 			playerController.Restart();

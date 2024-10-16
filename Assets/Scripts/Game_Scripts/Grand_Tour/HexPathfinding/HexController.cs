@@ -13,6 +13,7 @@ namespace GrandTour
         [SerializeField] private Cinemachine.CinemachineTargetGroup targetGroup;
 
         private int width, height;
+        private bool isFirstRun = true;
 
         [SerializeField] private List<GameObject> countries = new List<GameObject>();
         [SerializeField] private float showPathInterval;
@@ -23,6 +24,7 @@ namespace GrandTour
 
         [SerializeField] private Transform hexPref;
         [SerializeField] private GameObject finishFlagPref;
+        private GameObject finishFlag;
         [SerializeField] private ParticleSystem confetti;
         [SerializeField] private PlayerController playerController;
         private ParticleSystem spawnedConfetti;
@@ -54,23 +56,40 @@ namespace GrandTour
 
         public void Initialize()
         {
-            SpawnCountry();
+            SpawnCountry(isFirstRun);
+
             CreateGrid();
-            StartCoroutine(ShowCountryRoutine());
+
+            if (isFirstRun)
+                StartCoroutine(ShowCountryRoutine());
+
+            isFirstRun = false;
         }
 
         public void Restart()
         {
             if (selectedCountry != null)
                 Destroy(selectedCountry.gameObject);
+
+            if (playerController != null)
+                targetGroup.RemoveMember(playerController.transform);
+
+            if (finishFlag != null)
+                targetGroup.RemoveMember(finishFlag.transform);
         }
 
-        private void SpawnCountry()
+        private void SpawnCountry(bool isFirstRun)
         {
-            int randCountryIndex = Random.Range(0, countries.Count);
+            int randCountryIndex = 0;
+            if (isFirstRun)
+                randCountryIndex = Random.Range(0, countries.Count);
+
             selectedCountry = Instantiate(countries[randCountryIndex], transform).GetComponent<Country>();
             width = selectedCountry.width;
             height = selectedCountry.height;
+
+            if (!isFirstRun)
+                selectedCountry.SetOutline(false);
 
             targetGroup.AddMember(playerController.transform, 1f, 1f);
         }
@@ -150,7 +169,7 @@ namespace GrandTour
                 endPointZ = Random.Range(0, gridHexXZ.GetHeight());
             } while (gridHexXZ.GetGridObject(endPointX, endPointZ).isActive == false || (endPointX == startPointX && endPointZ == startPointZ));
 
-            GameObject finishFlag = Instantiate(finishFlagPref, finishFlagPref.transform.position, finishFlagPref.transform.rotation, gridHexXZ.GetGridObject(endPointX, endPointZ).visualTransform);
+            finishFlag = Instantiate(finishFlagPref, finishFlagPref.transform.position, finishFlagPref.transform.rotation, gridHexXZ.GetGridObject(endPointX, endPointZ).visualTransform);
             finishFlag.transform.position = gridHexXZ.GetWorldPosition(endPointX, endPointZ);
             spawnedConfetti = Instantiate(confetti, finishFlag.transform.position, confetti.transform.rotation, finishFlag.transform.parent);
 
