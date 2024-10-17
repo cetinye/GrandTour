@@ -32,10 +32,8 @@ namespace GrandTour
 		[Header("Virtual Camera Variables")]
 		[SerializeField] private CinemachineVirtualCamera virtualCamera;
 
-		void Awake()
-		{
-
-		}
+		[Header("Flash Interval")]
+		private bool isFlashable = true;
 
 		void Start()
 		{
@@ -53,6 +51,7 @@ namespace GrandTour
 			uiManager.Restart();
 			hexController.Restart();
 			playerController.Restart();
+			isFlashable = true;
 
 			uiManager.UpdateTimeText((int)timeLimit);
 			hexController.Initialize();
@@ -89,6 +88,13 @@ namespace GrandTour
 			if (!isLevelTimerOn) return;
 
 			timer -= Time.deltaTime;
+
+			if (timer <= 5.2f && isFlashable)
+			{
+				isFlashable = false;
+				// GameManager.instance.PlayFx("Countdown", 0.7f, 1f);
+				uiManager.FlashRed();
+			}
 
 			if (timer < 0)
 			{

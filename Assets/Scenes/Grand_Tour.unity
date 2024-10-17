@@ -2976,6 +2976,7 @@ MonoBehaviour:
   videoPlayer: {fileID: 1395229233}
   videoOnCanvas: {fileID: 250351606}
   skipButton: {fileID: 562110567}
+  flashInterval: 0.5
 --- !u!1 &790558776
 GameObject:
   m_ObjectHideFlags: 0

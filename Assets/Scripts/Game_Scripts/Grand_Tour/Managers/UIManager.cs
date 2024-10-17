@@ -43,6 +43,15 @@ namespace GrandTour
 		[SerializeField] private GameObject skipButton;
 		private int introWatchedBefore;
 
+		[Header("Flash Variables")]
+		[SerializeField] private float flashInterval = 0.5f;
+		private Color defaultColor;
+
+		void Awake()
+		{
+			defaultColor = timeText.color;
+		}
+
 		public void UpdateTimeText(int time)
 		{
 			timeText.text = time.ToString();
@@ -233,5 +242,18 @@ namespace GrandTour
 		}
 
 		#endregion
+
+		public void FlashRed()
+		{
+			Sequence redFlash = DOTween.Sequence();
+
+			redFlash.Append(timeText.DOColor(Color.red, flashInterval))
+					.SetEase(Ease.Linear)
+					.Append(timeText.DOColor(defaultColor, flashInterval))
+					.SetEase(Ease.Linear)
+					.SetLoops(6);
+
+			redFlash.Play();
+		}
 	}
 }

@@ -15,7 +15,7 @@ MonoBehaviour:
   levelId: 30
   types: 7
   passPercent: 7.91
-  timeLimit: 6
+  timeLimit: 22
   totalRounds: 3
   algorithmId: 3
   levelUpCriteria: 3
