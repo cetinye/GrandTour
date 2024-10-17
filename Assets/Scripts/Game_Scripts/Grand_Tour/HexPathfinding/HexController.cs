@@ -362,41 +362,9 @@ namespace GrandTour
                 gridObj.meshRenderer.material.EnableKeyword("_EMISSION");
             else
                 gridObj.meshRenderer.material.DisableKeyword("_EMISSION");
-            // gridObj.meshRenderer.material.color = color;
+
             gridObj.meshRenderer.material.DOColor(color, colorTransitionDuration);
             gridObj.meshRenderer.material.SetColor("_EmissionColor", color * emissionVal);
-
-            /*
-
-            switch (gridObj.color.name)
-            {
-                case "Red":
-                    gridObj.meshRenderer.material.SetColor("_EmissionColor", gridObj.color.color * 2.5f);
-                    break;
-                case "Green":
-                    gridObj.meshRenderer.material.SetColor("_EmissionColor", gridObj.color.color * 1.5f);
-                    break;
-                case "Blue":
-                    gridObj.meshRenderer.material.SetColor("_EmissionColor", gridObj.color.color * 2.5f);
-                    break;
-                case "Yellow":
-                    gridObj.meshRenderer.material.SetColor("_EmissionColor", gridObj.color.color * 1.5f);
-                    break;
-                case "Pink":
-                    gridObj.meshRenderer.material.SetColor("_EmissionColor", gridObj.color.color * 2.5f);
-                    break;
-                case "Brown":
-                    gridObj.meshRenderer.material.SetColor("_EmissionColor", gridObj.color.color * 2.5f);
-                    break;
-                case "Purple":
-                    gridObj.meshRenderer.material.SetColor("_EmissionColor", gridObj.color.color * 2.5f);
-                    break;
-                case "Cyan":
-                    gridObj.meshRenderer.material.SetColor("_EmissionColor", gridObj.color.color * 2.5f);
-                    break;
-            }
-
-            */
         }
 
         private void Highlight(int x, int z)

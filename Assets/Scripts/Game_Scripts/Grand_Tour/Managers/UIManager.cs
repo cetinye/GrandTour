@@ -111,19 +111,19 @@ namespace GrandTour
 			car.DOAnchorPosX(car.anchoredPosition.x + distance, 1f);
 			yield return new WaitForSeconds(1f);
 
-			if (percent <= LevelManager.LevelSO.passPercent)
+			if (playerRoute == bestRoute)
 			{
 				confettiParticle.Play();
-				descText.DOText("Well done! Although you exceeded the budget, you stayed within the %" + LevelManager.LevelSO.passPercent + " margin.", 2f);
+				descText.DOText("PERFECT SCORE!", 2f).SetEase(Ease.Linear);
 			}
-			else if (playerRoute == bestRoute)
+			else if (percent <= LevelManager.LevelSO.passPercent)
 			{
 				confettiParticle.Play();
-				descText.DOText("PERFECT SCORE!", 2f);
+				descText.DOText("Well done! Although you exceeded the budget, you stayed within the %" + LevelManager.LevelSO.passPercent + " margin.", 2f).SetEase(Ease.Linear);
 			}
 			else
 			{
-				descText.DOText("Oops! You exceeded the budget limit by more than %" + LevelManager.LevelSO.passPercent + ".", 2f);
+				descText.DOText("Oops! You exceeded the budget limit by more than %" + LevelManager.LevelSO.passPercent + ".", 2f).SetEase(Ease.Linear);
 			}
 
 			yield return new WaitForSeconds(3f);

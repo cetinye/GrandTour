@@ -11,6 +11,7 @@ namespace GrandTour
 		private int levelId;
 		[SerializeField] private List<LevelSO> levels = new List<LevelSO>();
 		public static LevelSO LevelSO;
+		private List<int> levelScores = new List<int>();
 		private int shortestCost;
 		private int playerCost;
 		private int currentScore;
@@ -130,8 +131,26 @@ namespace GrandTour
 				Debug.Log("Level Completed");
 			}
 
+			CalculateScore(currentScore);
 			DecideLevel(isSuccess);
 			uiManager.ShowStatPanel();
+		}
+
+		private void CalculateScore(int percent)
+		{
+			int score = LevelSO.maxScoreMap - (LevelSO.maxScoreMap * percent / 100);
+			levelScores.Add(score);
+		}
+
+		private int GetTotalScore()
+		{
+			int totalScore = 0;
+			for (int i = 0; i < levelScores.Count; i++)
+			{
+				totalScore += levelScores[i];
+			}
+			totalScore /= levelScores.Count;
+			return Mathf.Clamp(totalScore, 0, 1000);
 		}
 
 		public void RestartGame()
@@ -147,7 +166,8 @@ namespace GrandTour
 
 			if (++roundsPlayed >= totalRounds + 1)
 			{
-				Debug.Log("Grand Tour Completed");
+				uiManager.UpdateScoreText(GetTotalScore());
+				yield return new WaitForSeconds(1f);
 				UnityEngine.SceneManagement.SceneManager.LoadScene(0);
 			}
 			uiManager.UpdateRoundText(roundsPlayed, totalRounds);

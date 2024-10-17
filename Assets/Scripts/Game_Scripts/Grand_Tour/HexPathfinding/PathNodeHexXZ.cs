@@ -23,7 +23,8 @@
 
         public void CalculateFCost()
         {
-            fCost = gCost + hCost + HexController.instance.gridHexXZ.GetGridObject(x, y).tileWeight;
+            // fCost = gCost + hCost + HexController.instance.gridHexXZ.GetGridObject(x, y).tileWeight;
+            fCost = HexController.instance.gridHexXZ.GetGridObject(x, y).tileWeight;
         }
 
         public int GetTCost()
