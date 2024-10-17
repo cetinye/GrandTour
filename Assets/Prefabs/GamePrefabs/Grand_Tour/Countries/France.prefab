@@ -53409,6 +53409,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 22
   height: 28
+  countryMusic: 1
   outline: {fileID: 863589664740753505}
   timeToMoveUp: 2
   timeToFade: 2

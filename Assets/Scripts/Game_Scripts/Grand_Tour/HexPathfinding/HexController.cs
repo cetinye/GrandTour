@@ -90,7 +90,14 @@ namespace GrandTour
             height = selectedCountry.height;
 
             if (!isFirstRun)
+            {
                 selectedCountry.SetOutline(false);
+            }
+            else
+            {
+                AudioManager.instance.PlayOneShot(SoundType.CountrySpawn);
+                AudioManager.instance.Play(selectedCountry.countryMusic);
+            }
 
             targetGroup.AddMember(playerController.transform, 1f, 1f);
         }

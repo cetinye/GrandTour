@@ -7,6 +7,7 @@ namespace GrandTour
 	{
 		public int width;
 		public int height;
+		public SoundType countryMusic;
 
 		[Header("Animation Variables")]
 		[SerializeField] private SpriteRenderer outline;

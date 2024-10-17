@@ -35,7 +35,6 @@ namespace GrandTour
 
 		void Start()
 		{
-			AudioManager.instance.Play(SoundType.BG);
 			StartGame();
 		}
 

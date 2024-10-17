@@ -63,7 +63,15 @@ namespace GrandTour
 
     public enum SoundType
     {
-        BG,
+        Egypt,
+        France,
+        India,
+        Italy,
+        Japan,
+        Mexico,
+        Spain,
+        England,
+        CountrySpawn,
         Engine,
         Horn,
         CorrectHex,
