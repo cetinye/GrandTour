@@ -14,6 +14,9 @@ namespace GrandTour
 
         private int width, height;
         private bool isFirstRun = true;
+        private float distanceBtwStartEnd;
+        [SerializeField] private int minimumDistanceBtwStartEnd;
+        [SerializeField] private int maximumDistanceBtwStartEnd;
 
         [SerializeField] private List<GameObject> countries = new List<GameObject>();
         [SerializeField] private float showPathInterval;
@@ -176,11 +179,18 @@ namespace GrandTour
 
         private void SelectEndPoint()
         {
+            float distance;
             do
             {
                 endPointX = Random.Range(0, gridHexXZ.GetWidth());
                 endPointZ = Random.Range(0, gridHexXZ.GetHeight());
-            } while (gridHexXZ.GetGridObject(endPointX, endPointZ).isActive == false || (endPointX == startPointX && endPointZ == startPointZ));
+
+                distance = Mathf.Sqrt(Mathf.Pow(endPointX - startPointX, 2) + Mathf.Pow(endPointZ - startPointZ, 2));
+
+            } while (gridHexXZ.GetGridObject(endPointX, endPointZ).isActive == false
+                    || (endPointX == startPointX && endPointZ == startPointZ)
+                    || distance < minimumDistanceBtwStartEnd
+                    || distance > maximumDistanceBtwStartEnd);
 
             finishFlag = Instantiate(finishFlagPref, finishFlagPref.transform.position, finishFlagPref.transform.rotation, gridHexXZ.GetGridObject(endPointX, endPointZ).visualTransform);
             finishFlag.transform.position = gridHexXZ.GetWorldPosition(endPointX, endPointZ);

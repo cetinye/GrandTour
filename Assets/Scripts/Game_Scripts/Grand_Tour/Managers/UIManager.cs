@@ -4,6 +4,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 namespace GrandTour
 {
@@ -35,6 +36,12 @@ namespace GrandTour
 		[SerializeField] private RectTransform endPos;
 		[SerializeField] private ParticleSystem confettiParticle;
 		[SerializeField] private Button skipStatButton;
+
+		[Header("Intro variables")]
+		[SerializeField] private VideoPlayer videoPlayer;
+		[SerializeField] private GameObject videoOnCanvas;
+		[SerializeField] private GameObject skipButton;
+		private int introWatchedBefore;
 
 		public void UpdateTimeText(int time)
 		{
@@ -187,5 +194,42 @@ namespace GrandTour
 			descText.text = "";
 			car.anchoredPosition = new Vector2(startPos.anchoredPosition.x, car.anchoredPosition.y);
 		}
+
+		#region Intro
+
+		public void StartIntro()
+		{
+			videoPlayer.Play();
+			Invoke("EndReached", (float)videoPlayer.clip.length);
+			introWatchedBefore = PlayerPrefs.GetInt("GrandTour_introWatchedBefore", 0);
+			if (introWatchedBefore == 1)
+				skipButton.SetActive(true);
+		}
+
+		private void EndReached()
+		{
+			videoOnCanvas.SetActive(false);
+			PlayerPrefs.SetInt("GrandTour_introWatchedBefore", 1);
+			skipButton.SetActive(false);
+			videoPlayer.Stop();
+			levelManager.StartGame();
+		}
+
+		public void SkipIntro()
+		{
+			CancelInvoke();
+			videoPlayer.Stop();
+			skipButton.SetActive(false);
+			videoOnCanvas.SetActive(false);
+			levelManager.StartGame();
+		}
+
+		public void PlayPauseVideo()
+		{
+			videoPlayer.Play();
+			videoPlayer.Pause();
+		}
+
+		#endregion
 	}
 }

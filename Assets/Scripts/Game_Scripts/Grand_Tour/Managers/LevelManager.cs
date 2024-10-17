@@ -39,7 +39,8 @@ namespace GrandTour
 
 		void Start()
 		{
-			StartGame();
+			uiManager.PlayPauseVideo();
+			uiManager.StartIntro();
 		}
 
 		public void StartGame()
