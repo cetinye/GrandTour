@@ -114,7 +114,7 @@ namespace GrandTour
 			if (percent <= LevelManager.LevelSO.passPercent)
 			{
 				confettiParticle.Play();
-				descText.DOText("Well done! Although you exceeded the budget, you stayed within the %" + LevelManager.LevelSO.passPercent + " margin", 2f);
+				descText.DOText("Well done! Although you exceeded the budget, you stayed within the %" + LevelManager.LevelSO.passPercent + " margin.", 2f);
 			}
 			else if (playerRoute == bestRoute)
 			{

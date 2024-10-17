@@ -333,6 +333,7 @@ namespace GrandTour
             for (int i = 0; i < pathList.Count; i++)
             {
                 GridObject gridObj = gridHexXZ.GetGridObject(pathList[i].x, pathList[i].y);
+                targetGroup.AddMember(gridObj.visualTransform, 1f, 1f);
                 gridObj.visualTransform.DOMoveY(0.5f, yOffsetInterval).SetEase(Ease.InOutQuart);
                 ColorHex(pathList[i].x, pathList[i].y, new Color(0.1843137f, 0.3803922f, 0.03921569f, 0f), 2f, false);
 
@@ -346,6 +347,7 @@ namespace GrandTour
                 }
 
                 yield return new WaitForSeconds(showPathInterval);
+                targetGroup.RemoveMember(gridObj.visualTransform);
             }
             yield return new WaitForSeconds(showPathInterval);
 
