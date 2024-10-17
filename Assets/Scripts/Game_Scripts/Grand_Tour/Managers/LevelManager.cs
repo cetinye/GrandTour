@@ -11,6 +11,9 @@ namespace GrandTour
 		private int levelId;
 		[SerializeField] private List<LevelSO> levels = new List<LevelSO>();
 		public static LevelSO LevelSO;
+		private int shortestCost;
+		private int playerCost;
+		private int currentScore;
 
 		[Header("Other Controllers")]
 		[SerializeField] private UIManager uiManager;
@@ -97,12 +100,13 @@ namespace GrandTour
 
 		public void EndLevel(bool isTimesUp = false)
 		{
-			int shortestCost = hexController.GetTotalCost();
-			int playerCost = playerController.GetTravelledWeights();
-			float currentScore = ((float)(shortestCost - playerCost) / shortestCost) * 100;
-			currentScore = Mathf.CeilToInt(currentScore);
-			currentScore = Mathf.Abs(currentScore);
+			shortestCost = hexController.GetTotalCost();
+			playerCost = playerController.GetTravelledWeights();
+			currentScore = Mathf.Abs(Mathf.CeilToInt(((float)(shortestCost - playerCost) / shortestCost) * 100));
 			bool isSuccess;
+
+			Debug.Log("Current Score: " + currentScore);
+			Debug.Log("Pass Percent: " + LevelSO.passPercent);
 
 			if (currentScore <= LevelSO.passPercent)
 				isSuccess = true;
@@ -126,14 +130,20 @@ namespace GrandTour
 				Debug.Log("Level Completed");
 			}
 
-			StartCoroutine(RestartGame(isSuccess));
+			DecideLevel(isSuccess);
+			uiManager.ShowStatPanel();
 		}
 
-		IEnumerator RestartGame(bool isSuccess)
+		public void RestartGame()
 		{
-			yield return new WaitForSeconds(1);
+			StartCoroutine(RestartGameRoutine());
+		}
 
-			DecideLevel(isSuccess);
+		IEnumerator RestartGameRoutine()
+		{
+			yield return new WaitForEndOfFrame();
+
+			uiManager.SetStatPanelState(false);
 
 			if (++roundsPlayed >= totalRounds + 1)
 			{
@@ -184,6 +194,21 @@ namespace GrandTour
 		public bool GetTimerStatus()
 		{
 			return isLevelTimerOn;
+		}
+
+		public int GetBestRoute()
+		{
+			return shortestCost;
+		}
+
+		public int GetPlayerRoute()
+		{
+			return playerCost;
+		}
+
+		public int GetPercent()
+		{
+			return currentScore;
 		}
 
 		#region DEBUG BUTTON FUNCTIONS
