@@ -50,7 +50,16 @@ namespace GrandTour
 			hexController.Restart();
 			playerController.Restart();
 
+			uiManager.UpdateTimeText((int)timeLimit);
 			hexController.Initialize();
+		}
+
+		public void StartPlaying()
+		{
+			SetTimerState(true);
+			playerController.SetParentHex(false);
+			playerController.SetCarControls(true);
+			AudioManager.instance.PlayOneShot(SoundType.Horn);
 		}
 
 		private void AssignLevel()
@@ -171,6 +180,11 @@ namespace GrandTour
 		public void SetTimerState(bool state)
 		{
 			isLevelTimerOn = state;
+		}
+
+		public bool GetTimerStatus()
+		{
+			return isLevelTimerOn;
 		}
 
 		#region DEBUG BUTTON FUNCTIONS

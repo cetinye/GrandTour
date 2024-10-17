@@ -57,11 +57,12 @@ namespace GrandTour
         public void Initialize()
         {
             SpawnCountry(isFirstRun);
-
             CreateGrid();
 
             if (isFirstRun)
                 StartCoroutine(ShowCountryRoutine());
+            else
+                StartCoroutine(WithoutCountryStart());
 
             isFirstRun = false;
         }
@@ -102,9 +103,14 @@ namespace GrandTour
             yield return countrySeq.WaitForCompletion();
             levelManager.SetVirtualCamPriority(3);
             yield return new WaitForSeconds(2f);
-            levelManager.SetTimerState(true);
-            playerController.SetParentHex(false);
-            playerController.SetCarControls(true);
+            uiManager.AnimateInfoElements();
+        }
+
+        IEnumerator WithoutCountryStart()
+        {
+            yield return new WaitForSeconds(0.5f);
+            uiManager.AnimateInfoElements();
+            yield return null;
         }
 
         private void CreateGrid()
@@ -305,6 +311,8 @@ namespace GrandTour
 
         public void ShowShortestPath(bool isTimesUp = false)
         {
+            levelManager.SetTimerState(false);
+            uiManager.SetInfoPanelState(false);
             pathList = pathfindingHexXZ.FindPath(startPointX, startPointZ, endPointX, endPointZ);
             StartCoroutine(ShowPathAnim(isTimesUp));
         }
