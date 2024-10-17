@@ -21,6 +21,7 @@ namespace GrandTour
 
 			sequence = DOTween.Sequence();
 			sequence.Append(transform.DOMoveY(0f, timeToMoveUp));
+			sequence.AppendInterval(1f);
 			sequence.Append(outline.DOFade(0f, timeToFade));
 			return sequence;
 		}

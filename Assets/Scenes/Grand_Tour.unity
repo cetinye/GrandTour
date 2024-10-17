@@ -654,7 +654,7 @@ MonoBehaviour:
     loop: 1
     source: {fileID: 0}
   - name: 7
-    clip: {fileID: 8300000, guid: 4c933c755d1264944b75b453897d2eb8, type: 3}
+    clip: {fileID: 8300000, guid: 587434e4bf8df2e43be66eee5d398dc3, type: 3}
     volume: 0.4
     loop: 1
     source: {fileID: 0}
@@ -695,6 +695,11 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: 8
     clip: {fileID: 8300000, guid: 72131b5bd83c81545a3005aef2a6e406, type: 3}
+    volume: 0.8
+    loop: 0
+    source: {fileID: 0}
+  - name: 16
+    clip: {fileID: 8300000, guid: 6dd8b5144c33d68448c49eee083b61b2, type: 3}
     volume: 0.8
     loop: 0
     source: {fileID: 0}
@@ -3903,7 +3908,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 11.00116, y: 174}
+  m_AnchoredPosition: {x: 11.000977, y: 174}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1116776556

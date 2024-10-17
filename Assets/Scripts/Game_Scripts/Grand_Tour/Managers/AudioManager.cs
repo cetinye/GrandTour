@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -32,7 +33,6 @@ namespace GrandTour
             sound.source.Play();
         }
 
-
         public void PlayOneShot(SoundType name)
         {
             Sound sound = sounds.Find(sound => sound.name == name);
@@ -43,6 +43,17 @@ namespace GrandTour
         {
             Sound sound = sounds.Find(sound => sound.name == name);
             sound.source.Stop();
+        }
+
+        public void PlayAfterXSeconds(float seconds, SoundType name)
+        {
+            StartCoroutine(PlayWDelay(seconds, name));
+        }
+
+        IEnumerator PlayWDelay(float delay, SoundType name)
+        {
+            yield return new WaitForSeconds(delay);
+            PlayOneShot(name);
         }
     }
 
@@ -78,6 +89,7 @@ namespace GrandTour
         WrongHex,
         CarMove,
         Success,
-        Fail
+        Fail,
+        InfoElementSwipe
     }
 }

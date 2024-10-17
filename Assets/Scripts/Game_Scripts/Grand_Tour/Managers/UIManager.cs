@@ -68,7 +68,7 @@ namespace GrandTour
 			InfoElement infoElement = Instantiate(infoElementPref, infoElementsParent.transform);
 			infoElement.SetElement(sprite, text);
 			RectTransform r = infoElement.GetComponent<RectTransform>();
-			r.anchoredPosition = new Vector3(0, -1500, 0);
+			r.anchoredPosition = new Vector3(1500, 0, 0);
 		}
 
 		public void AnimateInfoElements()
@@ -82,7 +82,9 @@ namespace GrandTour
 
 			for (int i = 0; i < infoElementsParent.childCount; i++)
 			{
+				AudioManager.instance.PlayAfterXSeconds(0.8f, SoundType.InfoElementSwipe);
 				RectTransform r = infoElementsParent.GetChild(i).GetComponent<RectTransform>();
+				r.anchoredPosition = new Vector2(1500, slotPositions[i].anchoredPosition.y);
 				Tween t = r.DOAnchorPos(slotPositions[i].anchoredPosition, infoElementsMoveDuration).SetEase(Ease.InOutQuad);
 				yield return t.WaitForCompletion();
 			}
